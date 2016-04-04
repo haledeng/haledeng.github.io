@@ -6,9 +6,91 @@
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 24 Mar 2016 04:35:14 +0800</pubDate>
-    <lastBuildDate>Thu, 24 Mar 2016 04:35:14 +0800</lastBuildDate>
+    <pubDate>Mon, 04 Apr 2016 11:55:29 +0800</pubDate>
+    <lastBuildDate>Mon, 04 Apr 2016 11:55:29 +0800</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>npm scripts</title>
+        <description>&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;npm scripts&lt;/code&gt;是&lt;code class=&quot;highlighter-rouge&quot;&gt;package.json&lt;/code&gt;中的一个配置属性。做单元测试时，常常会用到&lt;code class=&quot;highlighter-rouge&quot;&gt;npm test&lt;/code&gt;，其实&lt;code class=&quot;highlighter-rouge&quot;&gt;npm scripts&lt;/code&gt;能做的更多。&lt;/p&gt;
+
+&lt;p&gt;最近社区有开发者提到，用&lt;code class=&quot;highlighter-rouge&quot;&gt;npm scripts&lt;/code&gt;替换现有的构建工具：grunt、gulp等，由此可见&lt;code class=&quot;highlighter-rouge&quot;&gt;npm scripts&lt;/code&gt;是一个强大的工具。&lt;/p&gt;
+
+&lt;h3 id=&quot;npm-scripts&quot;&gt;什么是 npm scripts&lt;/h3&gt;
+&lt;p&gt;先来看一个简单的&lt;code class=&quot;highlighter-rouge&quot;&gt;package.json&lt;/code&gt;(截取了&lt;code class=&quot;highlighter-rouge&quot;&gt;node-sass&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;package.json&lt;/code&gt;中的部分属性)&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;node-sass&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;version&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;3.5.0-beta.1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;scripts&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;coverage&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;node scripts/coverage.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;install&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;node script/install.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;postinstall&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;node scripts/build.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;pretest&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;node_modules/.bin/jshint bin lib scripts test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;node_modules/.bin/mocha test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;build&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;node scripts/build.js --force&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;prepublish&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;not-in-install &amp;amp;&amp;amp; node scripts/prepublish.js || in-install&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;npm&lt;/code&gt; 会有一些默认的命令，包括但不限于：publish、test、install等。
+执行这些命令时，实际执行的是&lt;code class=&quot;highlighter-rouge&quot;&gt;scripts&lt;/code&gt;中对应属性的脚本。比如，npm install 时，会执行&lt;code class=&quot;highlighter-rouge&quot;&gt;node script/install.js&lt;/code&gt;。同时提供了相对应的勾子：&lt;code class=&quot;highlighter-rouge&quot;&gt;pre&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;post&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;preinstall&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;postinstall&lt;/code&gt; 会相应的在 install 前后执行。&lt;/p&gt;
+
+&lt;h3 id=&quot;npm-scripts-&quot;&gt;npm scripts 能干些什么&lt;/h3&gt;
+&lt;p&gt;了解什么是&lt;code class=&quot;highlighter-rouge&quot;&gt;npm scripts&lt;/code&gt;后，它能做的事情就很明确了：&lt;code class=&quot;highlighter-rouge&quot;&gt;在scripts中定义命令（执行一个node脚本，或者有全局的node包去跑一些命令），然后用npm的命令行执行对应的命令&lt;/code&gt;。默认的一些指令的作用已经很明确了，比如&lt;code class=&quot;highlighter-rouge&quot;&gt;npm test&lt;/code&gt;会执行&lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt;对应的脚本等。那么如何自定义脚本呢？&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;scripts&quot;: {
+	&quot;dev&quot;: &quot;node-sass src/style.scss dest/style.css&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;上面的 demo 中定义了一个 dev 脚本，运行 &lt;code class=&quot;highlighter-rouge&quot;&gt;npm run dev&lt;/code&gt; 即可执行对应的命令。&lt;/p&gt;
+
+&lt;h3 id=&quot;npm-script-&quot;&gt;npm script 替代构建&lt;/h3&gt;
+&lt;p&gt;现有的构建体系依赖的插件体系，都是用构建体系本身去封装第3方库，不可避免的会存在以下问题：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;第3方库更新了，插件没有更新。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;报错了，是第3方库的问题还是插件的问题？&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;文档，文档，文档。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;……&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;npm scripts&lt;/code&gt; 至少可以避免1，2，3。使用者只需要关注于第3方库如何使用，无须关心对应的插件用法。同时，不用构建体系之间的移植也更加方便。&lt;/p&gt;
+
+&lt;p&gt;当然，&lt;code class=&quot;highlighter-rouge&quot;&gt;npm scripts&lt;/code&gt;使用本身也有些问题：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;某个功能如果没有对应的第3方库，编写插件比较麻烦。构建体系本身会提供一些api，编写插件时，可以复用这些api，但是用&lt;code class=&quot;highlighter-rouge&quot;&gt;npm scripts&lt;/code&gt;时，实际上是编写 node 插件，api的级别更低。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;跨平台。 &lt;code class=&quot;highlighter-rouge&quot;&gt;npm scripts&lt;/code&gt;可以基于管道的方式（一个task的输出，作为另一个task的输入），在windows下支持不友好。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;如何选择&lt;/h3&gt;
+&lt;p&gt;说了这么多 &lt;code class=&quot;highlighter-rouge&quot;&gt;npm scripts&lt;/code&gt;的好处，真的就要用它替代 grunt、gulp、fis吗？
+&lt;strong&gt;自己选择咯！&lt;/strong&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 04 Apr 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/2016/04/04/npm-scripts.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/2016/04/04/npm-scripts.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>从smart漫谈打包</title>
