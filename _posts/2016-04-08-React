@@ -1,0 +1,196 @@
+---
+layout:  post
+title:  "react 入门"
+date:   2016-04-07
+---
+
+[toc]
+
+### react 是什么
+要说现在最火的框架，非 react 莫属。
+react 是一个用户构建用户界面的 JS 库。官方的定义中，有下面3个核心点：
+
+1.  仅仅是MVC中的V，更关注渲染。
+
+2. 虚拟 DOM。在内层中构建 DOM 对应的树状机构，view 变化时，对比和上一个树的差异，计算最小渲染 。同时支持 node 服务端渲染。
+
+3. 数据流。这个更多的是 flux 和 redux 干的事情。
+
+
+### 如何使用react
+使用 react，需要引用 react.js、react-dom.js。如果代码中涉及到 JSX 语法，还需要引用 browser.js 。大体的结构：
+
+```
+<script src="../../build/react.js"></script>
+<script src="../../build/react-dom.js"></script>
+<script src="../../build/browser.min.js"></script>
+<script type="text/babel">
+// JSX
+</script>
+```
+其中，react 是 react 核心库，react-dom 封装了 dom 相关操作，browser 负责解析 JSX 语法。生产环境中，请用编译后的 JSX，因为：
+
+1. browser 很大，压缩后有 1.29 MB
+
+2. 编译很耗时。
+
+
+#### ReactDOM.render
+ReactDOM.render 将 react 组件渲染到 dom 上。
+
+```
+<script type="text/babel">
+ReactDom.reander(
+	<p>hello world</p>,
+	document.getElementById('container')
+)
+</script>
+```
+
+也可以用非 JSX 的方法
+
+```
+<script>
+ReactDom.reander(
+	React.createElement('p', null, 'hello world'),
+	document.getElementById('container')
+)
+</script>
+```
+
+
+#### this.props
+props 类似与 HTML 元素的 attribute，挂在标签元素上，具体的语法：
+
+```
+<标签 属性名="属性值" />
+```
+在 React 中，标签是 React Component，属性名是 prop，在组件内部，可以通过 `this.props.属性名`访问外部传递给组件的参数。
+
+```
+<script type="text/babel">
+var Hello = React.createClass({
+    render: function() {
+        return (
+            <h1>{this.props.text}</h1>
+        )
+    }
+});
+
+ReactDOM.render(
+	<Hello text="hello world" />,
+	document.getElementById('container')
+)
+</script>
+```
+props的主要作用是：`**接收组件外部传递给组件的参数，用于父、子组件间的数据流传递**`。 
+
+#### this.state
+state 可以理解为类的实例属性。`**用于组件内部不用方法间的数据传递**`。
+
+```
+var Real = React.createClass({
+	getInitialState: function() {
+		return {
+			value: 'hello world'
+		}
+	},
+	render: function() {
+		return (
+			<div>
+				<p>{this.state.value}</p>	
+				<input type="text" value={this.state.value} onChange={this._onChange}/>
+			</div>
+		)
+	},
+	_onChange: function(e) {
+		this.setState({
+			value: e.target.value
+		});
+	}
+});
+```
+
+#### this.refs
+refs 主要用于 **react 访问 DOM 层的 API**。
+
+```
+var Ref = React.createClass({
+    render: function() {
+        return (
+            <div>
+                <input type="button" value="click me"
+                onClick={this._btnClick} />
+                <input type="text"
+                   ref='myInput' />
+            </div>
+        )
+    },
+    _btnClick: function (e) {
+        this.refs.myInput.focus();
+    }
+});
+```
+
+#### form 表单
+
+
+### JSX & babel
+前面提到线下编译 JSX，babel 可以完成这项苦差，安装 babel：
+
+```
+npm i -g babel-cli
+```
+
+Babel 6 默认没有带转化器，需要手动安装 `es2015` 和 `react` 插件：
+
+```
+npm i babel-preset-es2015 babel-preset-react
+```
+
+执行 babel 指令，可以将 jsx 转换成 js（自带 watch 功能）
+
+```
+babel --presets es2015,react --watch src/ --out-dir lib/
+
+```
+
+可以对比一下转化前后的代码段：
+
+```
+// JSX
+var React = require('react');
+
+var Hello = React.createClass({
+    render: function() {
+        return (
+            <p>hello world</p>
+        )
+    }
+});
+
+module.exports = Hello;
+
+
+// 转化后
+
+'use strict';
+var React = require('react');
+
+var Hello = React.createClass({
+    displayName: 'Hello',
+
+    render: function render() {
+        return React.createElement(
+            'p',
+            null,
+            'hello world'
+        );
+    }
+});
+
+module.exports = Hello;
+
+```
+
+babel 主要把 JSX 语法转化成了`React.createElement`。
