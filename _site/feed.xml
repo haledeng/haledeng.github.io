@@ -1,14 +1,290 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>haledeng</title>
+    <title>A Field of haledeng</title>
     <description>Action speaks louder than words.
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 04 Apr 2016 11:55:29 +0800</pubDate>
-    <lastBuildDate>Mon, 04 Apr 2016 11:55:29 +0800</lastBuildDate>
+    <pubDate>Wed, 31 Aug 2016 09:24:25 +0800</pubDate>
+    <lastBuildDate>Wed, 31 Aug 2016 09:24:25 +0800</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>gulp-replace-file</title>
+        <description>&lt;h1 id=&quot;gulp-replace-file&quot;&gt;gulp-replace-file&lt;/h1&gt;
+&lt;p&gt;A gulp plugin to parse reference files in JS files. Different files will be parsed into different contents.
++ Template files (with a file extension name &lt;code class=&quot;highlighter-rouge&quot;&gt;.html&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;.tpl&lt;/code&gt;) =&amp;gt; JS functions.
++ Css files =&amp;gt; string.
++ Other files =&amp;gt; its file content.&lt;/p&gt;
+
+&lt;h3 id=&quot;install&quot;&gt;Install&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm i gulp-replace-file
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;usage&quot;&gt;Usage&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// __inline is the key function to reference file, which can be configed in gulpfile.
+var htmlFunc = __inline(&#39;./temp.html&#39;);
+var htmlStr = htmlFunc(data);
+var cssText = __inline(&#39;./test.css&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;config-in-gulpfile&quot;&gt;Config in gulpfile&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var replace = require(&#39;gulp-replace-file&#39;);
+gulp.task(&#39;replace&#39;, function() {
+	gulp.src(&#39;replace/test.js&#39;)
+		.pipe(replace())
+		.pipe(gulp.dest(&#39;./build/&#39;))
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;config-option&quot;&gt;config option&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;prefix&lt;/strong&gt; : The key value to reference file. &lt;code class=&quot;highlighter-rouge&quot;&gt;__inline&lt;/code&gt; is a default value.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 25 Aug 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/2016/08/25/gulp-replace-file.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/2016/08/25/gulp-replace-file.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>shelljs构建库</title>
+        <description>&lt;p&gt;单个lib的构建，使用gulp、grunt等构建工具，总感觉有点大材小用，需要安装一堆依赖不说，而且配置比较复杂。shelljs是一个轻量级的文件I/O库，可以做为简单的构建工具。&lt;/p&gt;
+
+&lt;h3 id=&quot;shelljs&quot;&gt;什么是shelljs&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;shelljs是node版的shell命令&lt;/strong&gt;。 通过node API，实现了Unix下shell命令。&lt;/p&gt;
+
+&lt;h3 id=&quot;nodemakefile&quot;&gt;node版Makefile&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;shelljs/make&lt;/code&gt;和unix下makefile的行为是一致的。脚本中包含一个全局的对象&lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt;。taget对象下面挂载了N个方法，有N中不同的行为。执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;node 文件名 方法名&lt;/code&gt;就是执行对应的方法。比如，有下面的make文件，执行&lt;code class=&quot;highlighter-rouge&quot;&gt;node make dist&lt;/code&gt;时，会执行&lt;code class=&quot;highlighter-rouge&quot;&gt;target.dist&lt;/code&gt;方法中定义的行为。若没有执行方法名，会执行&lt;code class=&quot;highlighter-rouge&quot;&gt;all&lt;/code&gt;方法。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;require(&#39;shelljs/make&#39;);
+target.all = function() {
+};
+
+target.dist = function() {
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;如何构建&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;所谓构建，其实是文件I /O操作&lt;/strong&gt;。shell命令中有很多关于文件读写的命令，比如cat，cp等等。使用这些基础的命令可以做一些简单的文件合并，拷贝等操作。能力不足的，可以用npm包来不全。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;适用范围&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;shelljs的能力比较有限，适用于单个库的构建&lt;/strong&gt;。比如zepto、Firebug等。单个项目的构建，建议还是使用gulp、fis等。&lt;/p&gt;
+</description>
+        <pubDate>Mon, 04 Jul 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/2016/07/04/shelljs.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/2016/07/04/shelljs.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>react 入门</title>
+        <description>&lt;h3 id=&quot;react-&quot;&gt;react 是什么&lt;/h3&gt;
+&lt;p&gt;要说现在最火的框架，非 react 莫属。
+react 是一个用户构建用户界面的 JS 库。官方的定义中，有下面3个核心点：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;仅仅是MVC中的V，更关注渲染。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;虚拟 DOM。在内层中构建 DOM 对应的树状机构，view 变化时，对比和上一个树的差异，计算最小渲染 。同时支持 node 服务端渲染。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;数据流。这个更多的是 flux 和 redux 干的事情。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;react&quot;&gt;如何使用react&lt;/h3&gt;
+&lt;p&gt;使用 react，需要引用 react.js、react-dom.js。如果代码中涉及到 JSX 语法，还需要引用 browser.js 。大体的结构：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;script src=&quot;../../build/react.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&quot;../../build/react-dom.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&quot;../../build/browser.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=&quot;text/babel&quot;&amp;gt;
+// JSX
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;其中，react 是 react 核心库，react-dom 封装了 dom 相关操作，browser 负责解析 JSX 语法。生产环境中，请用编译后的 JSX，因为：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;browser 很大，压缩后有 1.29 MB&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;编译很耗时。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;reactdomrender&quot;&gt;ReactDOM.render&lt;/h4&gt;
+&lt;p&gt;ReactDOM.render 将 react 组件渲染到 dom 上。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;script type=&quot;text/babel&quot;&amp;gt;
+ReactDom.reander(
+	&amp;lt;p&amp;gt;hello world&amp;lt;/p&amp;gt;,
+	document.getElementById(&#39;container&#39;)
+)
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;也可以用非 JSX 的方法&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;script&amp;gt;
+ReactDom.reander(
+	React.createElement(&#39;p&#39;, null, &#39;hello world&#39;),
+	document.getElementById(&#39;container&#39;)
+)
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;thisprops&quot;&gt;this.props&lt;/h4&gt;
+&lt;p&gt;props 类似与 HTML 元素的 attribute，挂在标签元素上，具体的语法：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;标签 属性名=&quot;属性值&quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在 React 中，标签是 React Component，属性名是 prop，在组件内部，可以通过 &lt;code class=&quot;highlighter-rouge&quot;&gt;this.props.属性名&lt;/code&gt;访问外部传递给组件的参数。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;script type=&quot;text/babel&quot;&amp;gt;
+var Hello = React.createClass({
+    render: function() {
+        return (
+            &amp;lt;h1&amp;gt;{this.props.text}&amp;lt;/h1&amp;gt;
+        )
+    }
+});
+
+ReactDOM.render(
+	&amp;lt;Hello text=&quot;hello world&quot; /&amp;gt;,
+	document.getElementById(&#39;container&#39;)
+)
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;props的主要作用是：&lt;code class=&quot;highlighter-rouge&quot;&gt;**接收组件外部传递给组件的参数，用于父、子组件间的数据流传递**&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h4 id=&quot;thisstate&quot;&gt;this.state&lt;/h4&gt;
+&lt;p&gt;state 可以理解为类的实例属性。&lt;code class=&quot;highlighter-rouge&quot;&gt;**用于组件内部不用方法间的数据传递**&lt;/code&gt;。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var Real = React.createClass({
+	getInitialState: function() {
+		return {
+			value: &#39;hello world&#39;
+		}
+	},
+	render: function() {
+		return (
+			&amp;lt;div&amp;gt;
+				&amp;lt;p&amp;gt;{this.state.value}&amp;lt;/p&amp;gt;	
+				&amp;lt;input type=&quot;text&quot; value={this.state.value} onChange={this._onChange}/&amp;gt;
+			&amp;lt;/div&amp;gt;
+		)
+	},
+	_onChange: function(e) {
+		this.setState({
+			value: e.target.value
+		});
+	}
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;thisrefs&quot;&gt;this.refs&lt;/h4&gt;
+&lt;p&gt;refs 主要用于 &lt;strong&gt;react 访问 DOM 层的 API&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var Ref = React.createClass({
+    render: function() {
+        return (
+            &amp;lt;div&amp;gt;
+                &amp;lt;input type=&quot;button&quot; value=&quot;click me&quot;
+                onClick={this._btnClick} /&amp;gt;
+                &amp;lt;input type=&quot;text&quot;
+                   ref=&#39;myInput&#39; /&amp;gt;
+            &amp;lt;/div&amp;gt;
+        )
+    },
+    _btnClick: function (e) {
+        this.refs.myInput.focus();
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;jsx--babel&quot;&gt;JSX &amp;amp; babel&lt;/h3&gt;
+&lt;p&gt;前面提到线下编译 JSX，babel 可以完成这项苦差，安装 babel：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm i -g babel-cli
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Babel 6 默认没有带转化器，需要手动安装 &lt;code class=&quot;highlighter-rouge&quot;&gt;es2015&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;react&lt;/code&gt; 插件：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm i babel-preset-es2015 babel-preset-react
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;执行 babel 指令，可以将 jsx 转换成 js（自带 watch 功能）&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;babel --presets es2015,react --watch src/ --out-dir lib/
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;可以对比一下转化前后的代码段：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// JSX
+var React = require(&#39;react&#39;);
+
+var Hello = React.createClass({
+    render: function() {
+        return (
+            &amp;lt;p&amp;gt;hello world&amp;lt;/p&amp;gt;
+        )
+    }
+});
+
+module.exports = Hello;
+
+
+// 转化后
+
+&#39;use strict&#39;;
+var React = require(&#39;react&#39;);
+
+var Hello = React.createClass({
+    displayName: &#39;Hello&#39;,
+
+    render: function render() {
+        return React.createElement(
+            &#39;p&#39;,
+            null,
+            &#39;hello world&#39;
+        );
+    }
+});
+
+module.exports = Hello;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;babel 主要把 JSX 语法转化成了&lt;code class=&quot;highlighter-rouge&quot;&gt;React.createElement&lt;/code&gt;。&lt;/p&gt;
+</description>
+        <pubDate>Thu, 07 Apr 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/2016/04/07/React.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/2016/04/07/React.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>npm scripts</title>
@@ -81,8 +357,7 @@
 &lt;/ol&gt;
 
 &lt;h3 id=&quot;section&quot;&gt;如何选择&lt;/h3&gt;
-&lt;p&gt;说了这么多 &lt;code class=&quot;highlighter-rouge&quot;&gt;npm scripts&lt;/code&gt;的好处，真的就要用它替代 grunt、gulp、fis吗？
-&lt;strong&gt;自己选择咯！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;说了这么多 &lt;code class=&quot;highlighter-rouge&quot;&gt;npm scripts&lt;/code&gt;的好处，真的就要用它替代 grunt、gulp、fis吗？&lt;/p&gt;
 
 </description>
         <pubDate>Mon, 04 Apr 2016 00:00:00 +0800</pubDate>
@@ -218,8 +493,126 @@ common文件夹下的所有样式文件？&lt;strong&gt;common打包必须要有
 
 </description>
         <pubDate>Thu, 24 Mar 2016 03:21:03 +0800</pubDate>
-        <link>http://yourdomain.com/2016/03/24/smart-pack.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/2016/03/24/smart-pack.html</guid>
+        <link>http://yourdomain.com/fis/2016/03/24/smart-pack.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/fis/2016/03/24/smart-pack.html</guid>
+        
+        
+        <category>fis</category>
+        
+      </item>
+    
+      <item>
+        <title>meteor简介</title>
+        <description>&lt;h3 id=&quot;what&quot;&gt;What&lt;/h3&gt;
+&lt;p&gt;“Meteor gives you a radically simpler way to build realtime mobile and web apps, entirely in JavaScript from one code base.”&lt;/p&gt;
+
+&lt;p&gt;简单来讲，Meteor基于Node来开发实时应用，复用前后端JS代码。&lt;/p&gt;
+
+&lt;h3 id=&quot;why&quot;&gt;Why&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;从 client 到 server， 从 package 到 数据库 api，全部都是JS&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;跨端&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;实时渲染&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;安装&lt;/h3&gt;
+&lt;p&gt;OS X or Linux 平台
+&lt;code class=&quot;highlighter-rouge&quot;&gt;curl https://install.meteor.com/ | sh&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Windows 平台需要下载 exe 文件安装。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;使用&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;meteor create&lt;/code&gt; 新建项目，进入项目目录， 执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;meteor&lt;/code&gt; 命令，运行，即可在浏览器查看。
+&lt;img src=&quot;https://cloud.githubusercontent.com/assets/3880323/11441060/3d13a72a-9543-11e5-91a7-04e4f5ee56b9.png&quot; alt=&quot;qq 20151127201245&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://cloud.githubusercontent.com/assets/3880323/11441097/99b48e22-9543-11e5-8b22-c2c00d9361aa.png&quot; alt=&quot;qq 20151127201508&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;应用文件结构&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;https://cloud.githubusercontent.com/assets/3880323/11441141/0d1f0806-9544-11e5-88b4-b20b3aa0ac0b.png&quot; alt=&quot;qq 20151127201830&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;/server 文件夹中的代码只会在服务器端运行。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在 /client 文件夹中的代码只会在客户端运行。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;其它代码则将同时运行于服务器端和客户端上。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;请将所有的静态文件（字体，图片等）放置在 /public 文件夹中。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;模版&lt;/h3&gt;
+&lt;p&gt;client 目录下的 main.html 是主入口，页面的模版文件放在 templates 目录下，模板的引用语法``
+表示引用 templates 目录下模版名为 ‘postList’ 的模版（这个和文件名没有关系），模版语法&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;template name=&quot;postsList&quot;&amp;gt;
+  &amp;lt;div class=&quot;posts&quot;&amp;gt;
+     
+       
+     
+  &amp;lt;/div&amp;gt;
+&amp;lt;/template&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;client 中文件的修改会触发网页reload刷新，类似livereload机制。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;数据库&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;https://cloud.githubusercontent.com/assets/3880323/11441232/2329edb8-9545-11e5-9328-47f3e0b6e73b.png&quot; alt=&quot;qq 20151127202621&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;启动应用是，会启动3个服务：proxy, mongoDB, http server.
+这里已经启动了一个mongod的服务，可以执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;meteor mongo&lt;/code&gt;  进入mongo shell，然后敲各种熟悉的命令进行db操作。&lt;/p&gt;
+
+&lt;p&gt;对db操作的REST接口，server 和 client 都可以用到，可以直接放到collections目录下。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Posts = new Mongo.Collection(&#39;posts&#39;);&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;注意： 这里没有用var定义，所有Posts是一个全局变量，server 要使用Posts对象时，并不需要应用相应的文件，直接引用即可&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if (Posts.find().count() === 0) {
+  Posts.insert({
+    title: &#39;Introducing Telescope&#39;,
+    url: &#39;http://sachagreif.com/introducing-telescope/&#39;
+  });
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;客户端获取db的数据，也直接调用Posts的方法&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Posts.find();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;赠品&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;包管理，类似于npm机制，安装某个meteor包，只需要 &lt;code class=&quot;highlighter-rouge&quot;&gt;meteor add xxx&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;终端调试，可以用meteor指令将app安装到模拟器中运行&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;与angular和react无缝对接&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;终有一天，前端将抛弃CGI、后台，开发出一款属于自己的APP。&lt;/p&gt;
+</description>
+        <pubDate>Wed, 07 Oct 2015 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/2015/10/07/meteor.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/2015/10/07/meteor.html</guid>
         
         
       </item>
@@ -357,9 +750,11 @@ describe(&#39;fis-postpackager-iconfont&#39;, function() {
 
 </description>
         <pubDate>Fri, 25 Sep 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/2015/09/25/how-to-write-fis-plugin.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/2015/09/25/how-to-write-fis-plugin.html</guid>
+        <link>http://yourdomain.com/fis/2015/09/25/how-to-write-fis-plugin.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/fis/2015/09/25/how-to-write-fis-plugin.html</guid>
         
+        
+        <category>fis</category>
         
       </item>
     

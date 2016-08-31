@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>react 入门</title>
+  <meta name="description" content="react 是什么要说现在最火的框架，非 react 莫属。react 是一个用户构建用户界面的 JS 库。官方的定义中，有下面3个核心点：">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://yourdomain.com/2016/04/07/React.html">
+  <link rel="alternate" type="application/rss+xml" title="A Field of haledeng" href="http://yourdomain.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">A Field of haledeng</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+<!--
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>-->
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">react 入门</h1>
+    <p class="post-meta"><time datetime="2016-04-07T00:00:00+08:00" itemprop="datePublished">Apr 7, 2016</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <h3 id="react-">react 是什么</h3>
+<p>要说现在最火的框架，非 react 莫属。
+react 是一个用户构建用户界面的 JS 库。官方的定义中，有下面3个核心点：</p>
+
+<ol>
+  <li>
+    <p>仅仅是MVC中的V，更关注渲染。</p>
+  </li>
+  <li>
+    <p>虚拟 DOM。在内层中构建 DOM 对应的树状机构，view 变化时，对比和上一个树的差异，计算最小渲染 。同时支持 node 服务端渲染。</p>
+  </li>
+  <li>
+    <p>数据流。这个更多的是 flux 和 redux 干的事情。</p>
+  </li>
+</ol>
+
+<h3 id="react">如何使用react</h3>
+<p>使用 react，需要引用 react.js、react-dom.js。如果代码中涉及到 JSX 语法，还需要引用 browser.js 。大体的结构：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;script src="../../build/react.js"&gt;&lt;/script&gt;
+&lt;script src="../../build/react-dom.js"&gt;&lt;/script&gt;
+&lt;script src="../../build/browser.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/babel"&gt;
+// JSX
+&lt;/script&gt;
+</code></pre>
+</div>
+<p>其中，react 是 react 核心库，react-dom 封装了 dom 相关操作，browser 负责解析 JSX 语法。生产环境中，请用编译后的 JSX，因为：</p>
+
+<ol>
+  <li>
+    <p>browser 很大，压缩后有 1.29 MB</p>
+  </li>
+  <li>
+    <p>编译很耗时。</p>
+  </li>
+</ol>
+
+<h4 id="reactdomrender">ReactDOM.render</h4>
+<p>ReactDOM.render 将 react 组件渲染到 dom 上。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;script type="text/babel"&gt;
+ReactDom.reander(
+	&lt;p&gt;hello world&lt;/p&gt;,
+	document.getElementById('container')
+)
+&lt;/script&gt;
+</code></pre>
+</div>
+
+<p>也可以用非 JSX 的方法</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;script&gt;
+ReactDom.reander(
+	React.createElement('p', null, 'hello world'),
+	document.getElementById('container')
+)
+&lt;/script&gt;
+</code></pre>
+</div>
+
+<h4 id="thisprops">this.props</h4>
+<p>props 类似与 HTML 元素的 attribute，挂在标签元素上，具体的语法：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;标签 属性名="属性值" /&gt;
+</code></pre>
+</div>
+<p>在 React 中，标签是 React Component，属性名是 prop，在组件内部，可以通过 <code class="highlighter-rouge">this.props.属性名</code>访问外部传递给组件的参数。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;script type="text/babel"&gt;
+var Hello = React.createClass({
+    render: function() {
+        return (
+            &lt;h1&gt;{this.props.text}&lt;/h1&gt;
+        )
+    }
+});
+
+ReactDOM.render(
+	&lt;Hello text="hello world" /&gt;,
+	document.getElementById('container')
+)
+&lt;/script&gt;
+</code></pre>
+</div>
+<p>props的主要作用是：<code class="highlighter-rouge">**接收组件外部传递给组件的参数，用于父、子组件间的数据流传递**</code>。</p>
+
+<h4 id="thisstate">this.state</h4>
+<p>state 可以理解为类的实例属性。<code class="highlighter-rouge">**用于组件内部不用方法间的数据传递**</code>。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var Real = React.createClass({
+	getInitialState: function() {
+		return {
+			value: 'hello world'
+		}
+	},
+	render: function() {
+		return (
+			&lt;div&gt;
+				&lt;p&gt;{this.state.value}&lt;/p&gt;	
+				&lt;input type="text" value={this.state.value} onChange={this._onChange}/&gt;
+			&lt;/div&gt;
+		)
+	},
+	_onChange: function(e) {
+		this.setState({
+			value: e.target.value
+		});
+	}
+});
+</code></pre>
+</div>
+
+<h4 id="thisrefs">this.refs</h4>
+<p>refs 主要用于 <strong>react 访问 DOM 层的 API</strong>。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var Ref = React.createClass({
+    render: function() {
+        return (
+            &lt;div&gt;
+                &lt;input type="button" value="click me"
+                onClick={this._btnClick} /&gt;
+                &lt;input type="text"
+                   ref='myInput' /&gt;
+            &lt;/div&gt;
+        )
+    },
+    _btnClick: function (e) {
+        this.refs.myInput.focus();
+    }
+});
+</code></pre>
+</div>
+
+<h3 id="jsx--babel">JSX &amp; babel</h3>
+<p>前面提到线下编译 JSX，babel 可以完成这项苦差，安装 babel：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>npm i -g babel-cli
+</code></pre>
+</div>
+
+<p>Babel 6 默认没有带转化器，需要手动安装 <code class="highlighter-rouge">es2015</code> 和 <code class="highlighter-rouge">react</code> 插件：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>npm i babel-preset-es2015 babel-preset-react
+</code></pre>
+</div>
+
+<p>执行 babel 指令，可以将 jsx 转换成 js（自带 watch 功能）</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>babel --presets es2015,react --watch src/ --out-dir lib/
+
+</code></pre>
+</div>
+
+<p>可以对比一下转化前后的代码段：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>// JSX
+var React = require('react');
+
+var Hello = React.createClass({
+    render: function() {
+        return (
+            &lt;p&gt;hello world&lt;/p&gt;
+        )
+    }
+});
+
+module.exports = Hello;
+
+
+// 转化后
+
+'use strict';
+var React = require('react');
+
+var Hello = React.createClass({
+    displayName: 'Hello',
+
+    render: function render() {
+        return React.createElement(
+            'p',
+            null,
+            'hello world'
+        );
+    }
+});
+
+module.exports = Hello;
+
+</code></pre>
+</div>
+
+<p>babel 主要把 JSX 语法转化成了<code class="highlighter-rouge">React.createElement</code>。</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+<!--
+    <h2 class="footer-heading">A Field of haledeng</h2>-->
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <!--<li>A Field of haledeng</li>-->
+          <li>email: <a href="mailto:dhlwust@163.com">dhlwust@163.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/haledeng"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">haledeng</span></a>
+
+          </li>
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Action speaks louder than words.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

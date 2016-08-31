@@ -2,6 +2,7 @@
 layout: post
 title:  "如何编写fis3插件"
 date:   2015-09-25
+categories: fis
 ---
 目前业务正在逐步迁移到fis3和lego，有许多和业务相关的fis插件需要处理。
 

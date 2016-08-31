@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>从smart漫谈打包</title>
+  <meta name="description" content="项目构建迁移到fis体系后，打包的问题就跟着来了。打包的基本方式是：分析依赖，合并文件，解决引入。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://yourdomain.com/fis/2016/03/24/smart-pack.html">
+  <link rel="alternate" type="application/rss+xml" title="A Field of haledeng" href="http://yourdomain.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">A Field of haledeng</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+<!--
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>-->
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">从smart漫谈打包</h1>
+    <p class="post-meta"><time datetime="2016-03-24T03:21:03+08:00" itemprop="datePublished">Mar 24, 2016</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>项目构建迁移到fis体系后，打包的问题就跟着来了。打包的基本方式是：分析依赖，合并文件，解决引入。</p>
+
+<h3 id="css">CSS处理方式</h3>
+
+<h4 id="section">来源</h4>
+
+<ul>
+  <li>link 引入</li>
+  <li>require 引入</li>
+  <li>其它模块的同名依赖</li>
+</ul>
+
+<h4 id="section-1">提取来源</h4>
+
+<ul>
+  <li>正则匹配link</li>
+  <li>require的方式可以直接通过 file.requires获取</li>
+  <li>处理方式略复杂，需要在分析js依赖时，判断依赖是css文件</li>
+</ul>
+
+<h4 id="section-2">打包逻辑</h4>
+
+<p>最粗暴的方式是allInOne，全部打成一个包。但是多个页面的业务中，有重复的代码被打到了不同的文件中。这种情况下，打包成2个文件比较合适：<strong>一个基础样式，一个页面样式</strong>。</p>
+
+<p><strong>common，reset等公共样式打包成一个文件，Page 级别的样式打包成一个文件</strong>，common级的样式，每个页面都引入（加载可以利用缓存），页面级样式根据自身的依赖引入不同的文件。</p>
+
+<h4 id="section-3">问题</h4>
+
+<ol>
+  <li>
+    <p>哪些算是公共样式？
+common文件夹下的所有样式文件？<strong>common打包必须要有通用性，确保能够覆盖到大部分（甚至全部）页面，同时又不会太冗余，给页面带来很多不必要的样式</strong>，这里必须要有一些规则来约束。</p>
+  </li>
+  <li>
+    <p>打包的灵活性？
+有些业务（活动等）就是单页面应用，打2个文件的方案真的适用吗？甚至H5的单页应用，就是需要直接inline到页面。</p>
+  </li>
+</ol>
+
+<h4 id="section-4">一些尝试</h4>
+
+<ol>
+  <li>定义一个common.scss之类的文件，import一些项目级的css文件，页面link这个公共的样式文件。打包处理时，将这个打成一个包，页面其他的css全部打成另一个包。</li>
+  <li>common文件夹下存放的就是项目级的css文件，每个Page只关注页面级的样式，打包自动将common下的css打包，接入引入问题。</li>
+  <li>灵活性可以通过配置的问题解决。</li>
+  <li>…….</li>
+</ol>
+
+<h3 id="js">JS打包</h3>
+
+<p>JS打包方式多样性，fis 官方推荐的loader也没有很好的解决这个问题（PS：在入口函数的注释里写着：粗暴的打包方式）。</p>
+
+<h4 id="section-5">来源</h4>
+
+<ul>
+  <li>script 标签引入</li>
+  <li>require</li>
+  <li>require.async</li>
+</ul>
+
+<h4 id="section-6">依赖方式</h4>
+
+<ul>
+  <li>同步</li>
+  <li>异步</li>
+</ul>
+
+<h4 id="section-7">处理方式</h4>
+
+<ul>
+  <li>同步直接script引入</li>
+  <li>异步通过resourceMap加载</li>
+</ul>
+
+<h4 id="section-8">奇葩</h4>
+
+<ul>
+  <li>同步里面的异步依赖</li>
+  <li>异步里面的同步、异步依赖</li>
+</ul>
+
+<p>以上只是问题的一小部分，足见打包场景的复杂和多样性，但是这里还是抛砖引玉的做一些简单的分析。</p>
+
+<h4 id="section-9">提取来源</h4>
+
+<p>这里只提取require和require.async，不对script引入做任何处理。从loader的处理方式看，它对script的处理并不成功，需要添加各种ignore注释，偶尔会打乱script的顺序。</p>
+
+<h4 id="section-10">打包逻辑</h4>
+
+<ul>
+  <li>分析每个文件id的依赖（深层分析，依赖的依赖）</li>
+  <li>依赖和当前文件打包</li>
+  <li>script 插入到html中  （同步）</li>
+  <li>生成resourceMap并插入到html中</li>
+</ul>
+
+<h4 id="section-11">问题</h4>
+
+<ol>
+  <li>异\同步文件的异步依赖如何处理？
+文件的异步依赖，全部打包到一起，丢到resourceMap中。</li>
+  <li>公共库如何处理？
+公共库单独打包，定义一个base之类的文件，将项目级的公共库引入，在html文件中require引入base，其他的文件的打包需要将这部分公共库排除掉。</li>
+</ol>
+
+<h3 id="section-12">其他问题</h3>
+
+<p>上面的逻辑也只是解决一些基础问题，鉴于<strong>项目的多样性、处理方式的多样性</strong>，实际只处理了一小部分的问题，很多例外的情况没有处理到：
++ require 第3方库
++ require.async 第3方库
++ require(模块是变量)
++ vm编译（vm中if else可以是2个页面，打包如何处理）
++ ……</p>
+
+<p>fis 提供了packTo的打包方式，这个是最原始的，通过match正则打包成不同的文件，但是如何解决引入文件？打包的文件放到哪个html中？同步异步？</p>
+
+<h3 id="section-13">最后的最后</h3>
+
+<p>打包实际针对的是<strong>一种业务场景和目录结构的方案，只是对一些默认的规则集的实现</strong>，像packTo这种方式，貌似能够解决所有的打包场景（业务自己去配置），但这种蛮荒时代的方式真的可用吗？野蛮生长，没有内在的规律约束。</p>
+
+<p>在打包之前，就应该<strong>规定业务场景和目录结构，定义使用范围和边界</strong>，不可能有一种打包方案使用所有的场景。官方的loader只是一种单页应用的方案。</p>
+
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+<!--
+    <h2 class="footer-heading">A Field of haledeng</h2>-->
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <!--<li>A Field of haledeng</li>-->
+          <li>email: <a href="mailto:dhlwust@163.com">dhlwust@163.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/haledeng"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">haledeng</span></a>
+
+          </li>
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Action speaks louder than words.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>About</title>
-  <meta name="description" content="Action speaks louder than words.
-">
+  <title>shelljs构建库</title>
+  <meta name="description" content="单个lib的构建，使用gulp、grunt等构建工具，总感觉有点大材小用，需要安装一堆依赖不说，而且配置比较复杂。shelljs是一个轻量级的文件I/O库，可以做为简单的构建工具。">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://yourdomain.com/about/">
+  <link rel="canonical" href="http://yourdomain.com/2016/07/04/shelljs.html">
   <link rel="alternate" type="application/rss+xml" title="A Field of haledeng" href="http://yourdomain.com/feed.xml">
 </head>
 
@@ -55,26 +54,36 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <article class="post">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title">About</h1>
+    <h1 class="post-title" itemprop="name headline">shelljs构建库</h1>
+    <p class="post-meta"><time datetime="2016-07-04T00:00:00+08:00" itemprop="datePublished">Jul 4, 2016</time></p>
   </header>
 
-  <div class="post-content">
-    <p>This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at <a href="http://jekyllrb.com/">jekyllrb.com</a></p>
+  <div class="post-content" itemprop="articleBody">
+    <p>单个lib的构建，使用gulp、grunt等构建工具，总感觉有点大材小用，需要安装一堆依赖不说，而且配置比较复杂。shelljs是一个轻量级的文件I/O库，可以做为简单的构建工具。</p>
 
-<p>You can find the source code for the Jekyll new theme at:
-<a href="https://github.com/jglovier"><span class="icon icon--github"><svg viewbox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path></svg>
-</span><span class="username">jglovier</span></a>
- /
-<a href="https://github.com/jglovier/jekyll-new">jekyll-new</a></p>
+<h3 id="shelljs">什么是shelljs</h3>
+<p><strong>shelljs是node版的shell命令</strong>。 通过node API，实现了Unix下shell命令。</p>
 
-<p>You can find the source code for Jekyll at
-<a href="https://github.com/jekyll"><span class="icon icon--github"><svg viewbox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path></svg>
-</span><span class="username">jekyll</span></a>
- /
-<a href="https://github.com/jekyll/jekyll">jekyll</a></p>
+<h3 id="nodemakefile">node版Makefile</h3>
+<p><code class="highlighter-rouge">shelljs/make</code>和unix下makefile的行为是一致的。脚本中包含一个全局的对象<code class="highlighter-rouge">target</code>。taget对象下面挂载了N个方法，有N中不同的行为。执行 <code class="highlighter-rouge">node 文件名 方法名</code>就是执行对应的方法。比如，有下面的make文件，执行<code class="highlighter-rouge">node make dist</code>时，会执行<code class="highlighter-rouge">target.dist</code>方法中定义的行为。若没有执行方法名，会执行<code class="highlighter-rouge">all</code>方法。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>require('shelljs/make');
+target.all = function() {
+};
+
+target.dist = function() {
+}
+</code></pre>
+</div>
+
+<h3 id="section">如何构建</h3>
+<p><strong>所谓构建，其实是文件I /O操作</strong>。shell命令中有很多关于文件读写的命令，比如cat，cp等等。使用这些基础的命令可以做一些简单的文件合并，拷贝等操作。能力不足的，可以用npm包来不全。</p>
+
+<h3 id="section-1">适用范围</h3>
+<p><strong>shelljs的能力比较有限，适用于单个库的构建</strong>。比如zepto、Firebug等。单个项目的构建，建议还是使用gulp、fis等。</p>
 
   </div>
 
